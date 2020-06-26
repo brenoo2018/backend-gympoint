@@ -1,10 +1,11 @@
 const Sequelize = require('sequelize');
 
 const User = require('../app/models/User');
+const Student = require('../app/models/Student');
 
-const databaseConfig = require('../config/databaseConfig');
+const configDatabase = require('../config/configDatabase');
 
-const models = [User];
+const models = [User, Student];
 
 class Database {
   constructor() {
@@ -12,7 +13,7 @@ class Database {
   }
 
   init() {
-    this.connection = new Sequelize(databaseConfig);
+    this.connection = new Sequelize(configDatabase);
 
     models.map((model) => model.init(this.connection));
   }
