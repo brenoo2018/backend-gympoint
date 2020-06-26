@@ -79,4 +79,17 @@ module.exports = {
       height,
     });
   },
+  async delete(req, res) {
+    const { id } = req.params;
+
+    const studentExists = await Student.findByPk(id);
+
+    if (!studentExists) {
+      res.status(404).json({ error: 'Aluno não encontrado' });
+    }
+
+    await Student.destroy({ where: { id } });
+
+    return res.status(200).json({ message: 'Registro deletado com sucesso' });
+  },
 };

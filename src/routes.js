@@ -13,5 +13,6 @@ routes.post('/students', StudentController.store);
 routes.get('/students', StudentController.index);
 routes.get('/students/:id', StudentController.show);
 routes.put('/students/:id', StudentController.update);
+routes.delete('/students/:id', StudentController.delete);
 
 module.exports = routes;
