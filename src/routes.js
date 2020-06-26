@@ -11,5 +11,6 @@ routes.post('/sessions', SessionController.store);
 routes.use(authMiddleware);
 routes.post('/students', StudentController.store);
 routes.get('/students', StudentController.index);
+routes.get('/students/:id', StudentController.show);
 
 module.exports = routes;
