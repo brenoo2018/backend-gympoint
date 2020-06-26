@@ -1,5 +1,5 @@
 <h2 align="center">
-Desafio: GYMPOINT 
+Desafio: GYMPOINT
 <p align="center"> API para gerenciamento de academia</p>
 </h2>
 
@@ -27,3 +27,7 @@ Desafio: GYMPOINT
 - O cadastro de alunos só pode ser feito por administradores autenticados na aplicação.
 
 - O aluno não pode se autenticar no sistema, ou seja, não possui senha.
+
+## Licença
+
+Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
