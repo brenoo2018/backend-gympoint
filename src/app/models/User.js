@@ -1,4 +1,5 @@
 const { Model, ...Sequelize } = require('sequelize');
+const bcrypt = require('bcryptjs');
 
 class User extends Model {
   static init(sequelize) {
@@ -14,6 +15,10 @@ class User extends Model {
     );
 
     return this;
+  }
+
+  checkPassword(password) {
+    return bcrypt.compare(password, this.password_hash);
   }
 }
 
