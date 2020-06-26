@@ -1,10 +1,9 @@
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
-
 const authConfig = require('../../config/authConfig');
 
 module.exports = async (req, res, next) => {
-  const authHeader = req.params.authorization;
+  const authHeader = req.headers.authorization;
 
   if (!authHeader) {
     return res.status(401).json({ error: 'Token não encontrado' });
