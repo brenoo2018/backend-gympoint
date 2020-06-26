@@ -1,3 +1,4 @@
+const Yup = require('yup');
 const Student = require('../models/Student');
 
 module.exports = {
@@ -23,6 +24,25 @@ module.exports = {
     return res.json({ id, name, email, age, weight, height });
   },
   async store(req, res) {
+    /**
+     * Início validação
+     */
+
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      email: Yup.string().email().required(),
+      age: Yup.number().integer().positive().required(),
+      weight: Yup.number().positive().required(),
+      height: Yup.number().positive().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Falha na validação' });
+    }
+
+    /**
+     * Fim validação
+     */
     const { email } = req.body;
 
     const studentExists = await Student.findOne({ where: { email } });
@@ -43,6 +63,25 @@ module.exports = {
     });
   },
   async update(req, res) {
+    /**
+     * Início validação
+     */
+
+    const schema = Yup.object().shape({
+      name: Yup.string(),
+      email: Yup.string().email(),
+      age: Yup.number().integer().positive(),
+      weight: Yup.number().positive(),
+      height: Yup.number().positive(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Falha na validação' });
+    }
+
+    /**
+     * Fim validação
+     */
     const { id } = req.params;
     const { email } = req.body;
 
