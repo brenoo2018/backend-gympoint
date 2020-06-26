@@ -42,4 +42,41 @@ module.exports = {
       height,
     });
   },
+  async update(req, res) {
+    const { id } = req.params;
+    const { email } = req.body;
+
+    const student = await Student.findByPk(id);
+
+    if (!student) {
+      res.status(404).json({ error: 'Aluno não encontrado' });
+    }
+
+    if (email && email !== student.email) {
+      const studentExists = await Student.findOne({ where: { email } });
+
+      if (studentExists) {
+        return res.status(400).json({
+          error: `O email ${email} já está sendo utilizado por outro aluno`,
+        });
+      }
+    }
+
+    const {
+      name,
+      email: studentEmail,
+      age,
+      weight,
+      height,
+    } = await student.update(req.body);
+
+    return res.json({
+      id,
+      name,
+      email: studentEmail,
+      age,
+      weight,
+      height,
+    });
+  },
 };
