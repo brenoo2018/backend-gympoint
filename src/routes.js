@@ -4,6 +4,7 @@ const SessionController = require('./app/controllers/SessionController');
 const StudentController = require('./app/controllers/StudentController');
 const PlanController = require('./app/controllers/PlanController');
 const RegistrationController = require('./app/controllers/RegistrationController');
+const CheckinController = require('./app/controllers/CheckinController');
 
 const authMiddleware = require('./app/middlewares/authMiddleware');
 
@@ -12,6 +13,9 @@ const routes = new Router();
 routes.post('/sessions', SessionController.store);
 
 routes.get('/plans', PlanController.index);
+
+routes.get('/students/:student_id/checkins', CheckinController.index);
+routes.post('/students/:student_id/checkins', CheckinController.store);
 
 routes.use(authMiddleware);
 routes.post('/students', StudentController.store);
