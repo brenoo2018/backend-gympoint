@@ -4,10 +4,11 @@ const User = require('../app/models/User');
 const Student = require('../app/models/Student');
 const Plan = require('../app/models/Plan');
 const Registration = require('../app/models/Registration');
+const Checkin = require('../app/models/Checkin');
 
 const configDatabase = require('../config/configDatabase');
 
-const models = [User, Student, Plan, Registration];
+const models = [User, Student, Plan, Registration, Checkin];
 
 class Database {
   constructor() {
