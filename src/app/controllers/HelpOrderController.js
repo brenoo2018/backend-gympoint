@@ -21,44 +21,80 @@ class HelpOrdersController {
   }
 
   async show(req, res) {
-    const { student_id } = req.params;
+    try {
+      /**
+       * início validação
+       */
+      const schemaParams = Yup.object().shape({
+        student_id: Yup.number().positive().required(),
+      });
 
-    const studentExists = await Student.findByPk(student_id);
+      if (!(await schemaParams.isValid(req.params))) {
+        return res.json({ error: 'Falha na validação' });
+      }
+      /**
+       * fim validação
+       */
 
-    if (!studentExists) {
-      return res.json({ error: 'Aluno não encontrado' });
+      const { student_id } = req.params;
+
+      const studentExists = await Student.findByPk(student_id);
+
+      if (!studentExists) {
+        return res.json({ error: 'Aluno não encontrado' });
+      }
+
+      const helpOrders = await HelpOrder.findAll({
+        where: { student_id },
+        order: [['created_at', 'desc']],
+        attributes: ['id', 'question', 'answer', 'answer_at'],
+      });
+
+      return res.json(helpOrders);
+    } catch (error) {
+      return res.json(error);
     }
-
-    const helpOrders = await HelpOrder.findAll({
-      where: { student_id },
-      order: [['created_at', 'desc']],
-      attributes: ['id', 'question', 'answer', 'answer_at'],
-    });
-
-    return res.json(helpOrders);
   }
 
   async store(req, res) {
-    const schema = Yup.object().shape({
-      question: Yup.string().required(),
-    });
+    try {
+      /**
+       * início validação
+       */
+      const schemaParams = Yup.object().shape({
+        student_id: Yup.number().positive().required(),
+      });
 
-    if (!(await schema.isValid(req.body))) {
-      return res.json({ error: 'Falha na validação' });
+      if (!(await schemaParams.isValid(req.params))) {
+        return res.json({ error: 'Falha na validação' });
+      }
+
+      const schemaBody = Yup.object().shape({
+        question: Yup.string().required(),
+      });
+
+      if (!(await schemaBody.isValid(req.body))) {
+        return res.json({ error: 'Falha na validação' });
+      }
+      /**
+       * fim validação
+       */
+
+      const { student_id } = req.params;
+      const { question } = req.body;
+
+      const studentExists = await Student.findByPk(student_id);
+
+      if (!studentExists) {
+        return res.json({ error: 'Aluno não encontrado' });
+      }
+
+      const helpOrder = await HelpOrder.create({ student_id, question });
+
+      return res.json(helpOrder);
+    } catch (error) {
+      return res.json(error);
     }
-
-    const { student_id } = req.params;
-    const { question } = req.body;
-
-    const studentExists = await Student.findByPk(student_id);
-
-    if (!studentExists) {
-      return res.json({ error: 'Aluno não encontrado' });
-    }
-
-    const helpOrder = await HelpOrder.create({ student_id, question });
-
-    return res.json(helpOrder);
   }
 }
 

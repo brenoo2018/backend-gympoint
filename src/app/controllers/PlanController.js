@@ -11,39 +11,51 @@ class PlanController {
   }
 
   async store(req, res) {
-    // validação
+    try {
+      // validação
 
-    const schema = Yup.object().shape({
-      title: Yup.string().required(),
-      duration: Yup.number().required().integer().positive(),
-      price: Yup.number().required().positive(),
-    });
+      const schemaBody = Yup.object().shape({
+        title: Yup.string().required(),
+        duration: Yup.number().required().integer().positive(),
+        price: Yup.number().required().positive(),
+      });
 
-    if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Falha na validação' });
+      if (!(await schemaBody.isValid(req.body))) {
+        return res.status(400).json({ error: 'Falha na validação' });
+      }
+
+      // fim validação
+
+      const { title, duration, price } = await Plan.create(req.body);
+
+      return res.json({
+        title,
+        duration,
+        price,
+      });
+    } catch (error) {
+      return res.json(error);
     }
-
-    // fim validação
-
-    const { title, duration, price } = await Plan.create(req.body);
-
-    return res.json({
-      title,
-      duration,
-      price,
-    });
   }
 
   async update(req, res) {
     // validação
 
-    const schema = Yup.object().shape({
+    const schemaParams = Yup.object().shape({
+      id: Yup.number().positive().required(),
+    });
+
+    if (!(await schemaParams.isValid(req.params))) {
+      return res.json({ error: 'Falha na validação' });
+    }
+
+    const schemaBody = Yup.object().shape({
       title: Yup.string(),
       duration: Yup.number().integer().positive(),
       price: Yup.number().positive(),
     });
 
-    if (!(await schema.isValid(req.body))) {
+    if (!(await schemaBody.isValid(req.body))) {
       return res.status(400).json({ error: 'Falha na validação' });
     }
 
@@ -66,17 +78,32 @@ class PlanController {
   }
 
   async delete(req, res) {
-    const { id } = req.params;
+    try {
+      // validação
 
-    const plan = await Plan.findByPk(id);
+      const schemaParams = Yup.object().shape({
+        id: Yup.number().positive().required(),
+      });
 
-    if (!plan) {
-      res.status(404).json({ error: 'Plano não encontrado' });
+      if (!(await schemaParams.isValid(req.params))) {
+        return res.json({ error: 'Falha na validação' });
+      }
+      // fim validação
+
+      const { id } = req.params;
+
+      const plan = await Plan.findByPk(id);
+
+      if (!plan) {
+        res.status(404).json({ error: 'Plano não encontrado' });
+      }
+
+      plan.destroy();
+
+      return res.status(200).json({ message: 'Registro deletado com sucesso' });
+    } catch (error) {
+      return res.json(error);
     }
-
-    plan.destroy();
-
-    return res.status(200).json({ message: 'Registro deletado com sucesso' });
   }
 }
 module.exports = new PlanController();
