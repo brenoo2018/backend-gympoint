@@ -6,6 +6,7 @@ const PlanController = require('./app/controllers/PlanController');
 const RegistrationController = require('./app/controllers/RegistrationController');
 const CheckinController = require('./app/controllers/CheckinController');
 const HelpOrderController = require('./app/controllers/HelpOrderController');
+const AnswerController = require('./app/controllers/AnswerController');
 
 const authMiddleware = require('./app/middlewares/authMiddleware');
 
@@ -19,6 +20,7 @@ routes.get('/students/:student_id/checkins', CheckinController.index);
 routes.post('/students/:student_id/checkins', CheckinController.store);
 
 routes.get('/help-orders', HelpOrderController.index);
+routes.post('/help-orders/:id', AnswerController.store);
 routes.get('/students/:student_id/help-orders', HelpOrderController.show);
 routes.post('/students/:student_id/help-orders', HelpOrderController.store);
 
