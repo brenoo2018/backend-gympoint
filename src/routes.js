@@ -2,11 +2,18 @@ const { Router } = require('express');
 
 const SessionController = require('./app/controllers/SessionController');
 const StudentController = require('./app/controllers/StudentController');
+const PlanController = require('./app/controllers/PlanController');
+
 const authMiddleware = require('./app/middlewares/authMiddleware');
 
 const routes = new Router();
 
 routes.post('/sessions', SessionController.store);
+
+routes.get('/plans', PlanController.index);
+routes.post('/plans', PlanController.store);
+routes.put('/plans/:id', PlanController.update);
+routes.delete('/plans/:id', PlanController.delete);
 
 routes.use(authMiddleware);
 routes.post('/students', StudentController.store);
